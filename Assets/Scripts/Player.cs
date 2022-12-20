@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     private float mvt_speed = 5.0f; //Movement speed
     [SerializeField]
     private Projectile projectile;
-
+    
     [SerializeField]
     private float shoot_cooldown=1.0f; //s
     private float shoot_cd;
@@ -19,11 +19,13 @@ public class Player : MonoBehaviour
     private float move_input, shoot_input;
 
     Rigidbody2D rigidbody2d;
+    Collider2D collider2d;
 
     // Start is called before the first frame update
     void Start()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
+        collider2d = GetComponent<Collider2D>();
     }
 
     // Update is called once per frame
@@ -65,12 +67,29 @@ public class Player : MonoBehaviour
         rigidbody2d.MovePosition(position); //Movement processed by the phyisc engine for Collision, etc.
     }
 
+    [ContextMenu("Shoot")]
     private void Shoot()
     {
         Debug.Log("Fire !!!");
-        Projectile new_projectile = Instantiate<Projectile>(projectile, transform.position, transform.rotation); //Spawn projectile at current position
+        //TODO : Cleaner instantiate position to prevent collision
+        // Debug.Log((collider2d.bounds.size.y/2)+(projectile.GetComponent<Collider2D>().bounds.size.y/2));
+        // float y_offset=collider2d.bounds.size.y/2+projectile.GetComponent<Collider2D>().bounds.size.y/2+0.1f;
+        float y_offset = collider2d.bounds.size.y*Mathf.Sign(projectile_speed);
+        //Spawn projectile at above current position
+        Projectile new_projectile = Instantiate<Projectile>(projectile, 
+            new Vector3(transform.position.x, transform.position.y+y_offset, transform.position.z), 
+            transform.rotation
+        ); 
         new_projectile.speed = projectile_speed; //Up
 
         shoot_cd = shoot_cooldown; //Reset cooldown
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        Debug.Log(gameObject.name+" collide with "+other.name);
+        if (other.gameObject.layer == LayerMask.NameToLayer("Projectiles"))
+        {
+            Debug.Log("Hit by projectile !");
+        }
     }
 }

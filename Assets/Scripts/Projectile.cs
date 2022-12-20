@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public float speed = 5.0f; //Movement speed
+    public float speed; //Movement speed
 
     // Start is called before the first frame update
     void Start()
     {
         
     }
-
+    
     // Update is called once per frame
     void Update()
     {
@@ -28,5 +28,11 @@ public class Projectile : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) 
+    {
+        Debug.Log(gameObject.name+" collide with "+other.name);
+        Destroy(gameObject);
     }
 }
