@@ -33,6 +33,6 @@ public class Projectile : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other) 
     {
         Debug.Log(gameObject.name+" collide with "+other.name);
-        Destroy(gameObject);
+        // Destroy(gameObject);
     }
 }

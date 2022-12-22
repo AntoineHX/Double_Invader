@@ -5,13 +5,14 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D),typeof(Rigidbody2D))]
 public class Player : MonoBehaviour
 {
-    [SerializeField]
-    private float projectile_speed=5.0f;
+
     [SerializeField]
     private float mvt_speed = 5.0f; //Movement speed
     [SerializeField]
     private Projectile projectile;
-    
+    [SerializeField]
+    private float projectile_speed=5.0f;
+    HashSet<string> danger_projectile = new HashSet<string>(new [] {"Invader"}); //Projectile tags inflicting dammage
     [SerializeField]
     private float shoot_cooldown=1.0f; //s
     private float shoot_cd;
@@ -70,26 +71,30 @@ public class Player : MonoBehaviour
     [ContextMenu("Shoot")]
     private void Shoot()
     {
-        Debug.Log("Fire !!!");
+        Debug.Log(gameObject.name+": Fire !");
         //TODO : Cleaner instantiate position to prevent collision
         // Debug.Log((collider2d.bounds.size.y/2)+(projectile.GetComponent<Collider2D>().bounds.size.y/2));
         // float y_offset=collider2d.bounds.size.y/2+projectile.GetComponent<Collider2D>().bounds.size.y/2+0.1f;
-        float y_offset = collider2d.bounds.size.y*Mathf.Sign(projectile_speed);
+        float y_offset = 0; //collider2d.bounds.size.y*Mathf.Sign(projectile_speed);
         //Spawn projectile at above current position
         Projectile new_projectile = Instantiate<Projectile>(projectile, 
             new Vector3(transform.position.x, transform.position.y+y_offset, transform.position.z), 
             transform.rotation
         ); 
-        new_projectile.speed = projectile_speed; //Up
+        new_projectile.speed = projectile_speed; //Set projectile speed & direction
+        new_projectile.tag = "Player";
 
         shoot_cd = shoot_cooldown; //Reset cooldown
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
         Debug.Log(gameObject.name+" collide with "+other.name);
-        if (other.gameObject.layer == LayerMask.NameToLayer("Projectiles"))
+        //Handle dammage in projectile instead ?
+        if (other.gameObject.layer == LayerMask.NameToLayer("Projectiles") && danger_projectile.Contains(other.gameObject.tag))
         {
-            Debug.Log("Hit by projectile !");
+            Debug.Log(gameObject.name+": Hit by projectile !");
+            Destroy(other.gameObject);
+            Destroy(gameObject);
         }
     }
 }
