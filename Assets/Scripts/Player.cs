@@ -7,6 +7,15 @@ public class Player : EntityBase
 {
     [SerializeField]
     float shoot_cooldown=1.0f; //s
+
+    //Recovery
+    bool recovering = false; //TODO : link repair UI to set method
+    [SerializeField]
+    float recoveryTime = 2.0f; //Time for preparation of product
+    float recoveryTimer= 0.0f;
+    [SerializeField]
+    UITimer recoveryUI = null; //Script of the UI display
+
     //Last user input
     float move_input, shoot_input;
 
@@ -16,6 +25,11 @@ public class Player : EntityBase
     // Start is called before the first frame update
     void Start()
     {
+         if(recoveryUI is null)
+            Debug.LogWarning(gameObject.name+" doesn't have a recoveryUI set");
+        else
+            recoveryUI.gameObject.SetActive(false);
+
         rigidbody2d = GetComponent<Rigidbody2D>();
         collider2d = GetComponent<Collider2D>();
     }
@@ -38,10 +52,22 @@ public class Player : EntityBase
         {
             shoot_cd-=Time.deltaTime;
         }
-        if (shoot_input != 0 && shoot_cd<=0)
+        if (shoot_input != 0 && shoot_cd<=0 && !recovering)
         {
             Shoot();
             shoot_cd = shoot_cooldown; //Reset cooldown
+        }
+
+        if(recovering && recoveryTimer<recoveryTime) //Update repair UI
+        {
+            recoveryTimer+=Time.deltaTime;
+            if(recoveryUI != null)
+                recoveryUI.SetValue(recoveryTimer/recoveryTime);
+        }
+        else //Finished recovery
+        {
+            recovering=false;
+            recoveryUI.gameObject.SetActive(recovering);
         }
     }
 
@@ -50,7 +76,8 @@ public class Player : EntityBase
     {
         //Movement of a physic object
         Vector2 position = rigidbody2d.position;
-        position.x += move_input * mvt_speed * Time.deltaTime;
+        if(!recovering) //Don't move if recovering
+            position.x += move_input * mvt_speed * Time.deltaTime;
 
         // Clamp the position of the character so they do not go out of bounds
         Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero);
@@ -59,32 +86,35 @@ public class Player : EntityBase
 
         rigidbody2d.MovePosition(position); //Movement processed by the phyisc engine for Collision, etc.
     }
-    void OnTriggerEnter2D(Collider2D other) {
-        Debug.Log(gameObject.name+" collide with "+other.name);
-    }
-
-    // public override bool Hit()
-    // {
-    //     //TODO : Reparation/Destruction state
-    //     return true; //Consume/Destroy damaging object
+    // void OnTriggerEnter2D(Collider2D other) {
+    //     Debug.Log(gameObject.name+" collide with "+other.name);
     // }
+
+    [ContextMenu("PlayerHit")]
+    public override bool Hit()
+    {
+        if(recovering) //Hit during repair => Destroyed
+        {
+            Debug.Log(gameObject.name+": Destroyed !");
+            Destroy(gameObject);
+        }
+        else //Hit => start recovery
+        {
+            Debug.Log(gameObject.name+": Recovering...");
+            recovering=true;
+            if(recoveryUI != null) //Display repair UI
+            {
+                recoveryTimer=0.0f;
+                recoveryUI.SetValue(recoveryTimer/recoveryTime);
+                recoveryUI.gameObject.SetActive(recovering);
+            }
+        }
+        return true; //Consume/Destroy damaging object
+    }
     
     // [ContextMenu("Shoot")]
     // protected override void Shoot()
     // {
     //     Debug.Log(gameObject.name+": Fire !");
-    //     //TODO : Cleaner instantiate position to prevent collision
-    //     // Debug.Log((collider2d.bounds.size.y/2)+(projectile.GetComponent<Collider2D>().bounds.size.y/2));
-    //     // float y_offset=collider2d.bounds.size.y/2+projectile.GetComponent<Collider2D>().bounds.size.y/2+0.1f;
-    //     float y_offset = 0; //collider2d.bounds.size.y*Mathf.Sign(projectile_speed);
-    //     //Spawn projectile at above current position
-    //     Projectile new_projectile = Instantiate<Projectile>(projectile, 
-    //         new Vector3(transform.position.x, transform.position.y+y_offset, transform.position.z), 
-    //         transform.rotation
-    //     ); 
-    //     new_projectile.speed = projectile_speed; //Set projectile speed & direction
-    //     new_projectile.tag = gameObject.tag; //Owner of the projectile
-
-    //     shoot_cd = shoot_cooldown; //Reset cooldown
     // }
 }

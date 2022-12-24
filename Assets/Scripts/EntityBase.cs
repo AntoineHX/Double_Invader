@@ -17,6 +17,7 @@ public abstract class EntityBase : MonoBehaviour, IHitable
     [ContextMenu("Hit")]
     public virtual bool Hit()
     {
+        Debug.Log(gameObject.name+": Destroyed !");
         Destroy(gameObject);
         return true; //Consume/Destroy damaging object
     }

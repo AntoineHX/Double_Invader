@@ -152,10 +152,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6411693f97989e147900dcdd4631e15f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shoot_cooldown: 3
+  mvt_speed: 5
   projectile: {fileID: 2442949188363525833, guid: 38c7ec6b83c1e3c4aa0889fcc7edf731, type: 3}
   projectile_speed: -5
+  min_shoot_cooldown: 0.5
+  max_shoot_cooldown: 5
+  random_waypoint_order: 1
   waypoints:
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
 --- !u!195 &963507286

@@ -61,10 +61,10 @@ public class Invader : EntityBase
         }
     }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        Debug.Log(gameObject.name+" collide with "+other.name);
-    }
+    // void OnTriggerEnter2D(Collider2D other)
+    // {
+    //     Debug.Log(gameObject.name+" collide with "+other.name);
+    // }
 
     [ContextMenu("NextPoint")]
     void GotoNextPoint() 
@@ -80,23 +80,4 @@ public class Invader : EntityBase
         // cycling to the start if necessary.
         destPoint = (destPoint + 1) % waypoints.Length;
     }
-
-    // [ContextMenu("Shoot")]
-    // protected override void Shoot()
-    // {
-    //     Debug.Log(gameObject.name+": Fire !");
-    //     //TODO : Cleaner instantiate position to prevent collision
-    //     // Debug.Log((collider2d.bounds.size.y/2)+(projectile.GetComponent<Collider2D>().bounds.size.y/2));
-    //     // float y_offset=collider2d.bounds.size.y/2+projectile.GetComponent<Collider2D>().bounds.size.y/2+0.1f;
-    //     float y_offset = 0; //collider2d.bounds.size.y*Mathf.Sign(projectile_speed);
-    //     //Spawn projectile at above current position
-    //     Projectile new_projectile = Instantiate<Projectile>(projectile, 
-    //         new Vector3(transform.position.x, transform.position.y+y_offset, transform.position.z), 
-    //         transform.rotation
-    //     ); 
-    //     new_projectile.speed = projectile_speed; //Set projectile speed & direction
-    //     new_projectile.tag = gameObject.tag;
-
-    //     shoot_cd = shoot_cooldown; //Reset cooldown
-    // }
 }
