@@ -7,8 +7,10 @@ using UnityEngine.AI;
 public class Invader : EntityBase
 {
     [SerializeField]
-    float shoot_cooldown=1.0f; //s
+    float min_shoot_cooldown=1.0f, max_shoot_cooldown=5.0f; //s
     //Navigation
+    [SerializeField]
+    bool random_waypoint_order=false;
     [SerializeField]
     Transform[] waypoints;
     int destPoint = 0;
@@ -27,6 +29,12 @@ public class Invader : EntityBase
         //Assign Random priority to prevent two agent blocking each other
         // agent.avoidancePriority=Random.Range(0, 99);
 
+        //Randomize waypoints order
+        if(random_waypoint_order){
+            List<Transform> tf_list = new List<Transform>(waypoints);
+            Utilities.Shuffle(tf_list);
+            waypoints= tf_list.ToArray();
+        }
         GotoNextPoint();
     }
 
@@ -49,7 +57,7 @@ public class Invader : EntityBase
         else
         {
             Shoot();
-            shoot_cd = shoot_cooldown; //Reset cooldown
+            shoot_cd = Random.Range(min_shoot_cooldown, max_shoot_cooldown); //Reset cooldown
         }
     }
 
