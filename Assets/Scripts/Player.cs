@@ -3,21 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D),typeof(Rigidbody2D))]
-public class Player : MonoBehaviour
+public class Player : EntityBase
 {
-
     [SerializeField]
-    private float mvt_speed = 5.0f; //Movement speed
-    [SerializeField]
-    private Projectile projectile;
-    [SerializeField]
-    private float projectile_speed=5.0f;
-    HashSet<string> danger_projectile = new HashSet<string>(new [] {"Invader"}); //Projectile tags inflicting dammage
-    [SerializeField]
-    private float shoot_cooldown=1.0f; //s
-    private float shoot_cd;
+    float shoot_cooldown=1.0f; //s
     //Last user input
-    private float move_input, shoot_input;
+    float move_input, shoot_input;
 
     Rigidbody2D rigidbody2d;
     Collider2D collider2d;
@@ -50,6 +41,7 @@ public class Player : MonoBehaviour
         if (shoot_input != 0 && shoot_cd<=0)
         {
             Shoot();
+            shoot_cd = shoot_cooldown; //Reset cooldown
         }
     }
 
@@ -67,34 +59,32 @@ public class Player : MonoBehaviour
 
         rigidbody2d.MovePosition(position); //Movement processed by the phyisc engine for Collision, etc.
     }
-
-    [ContextMenu("Shoot")]
-    private void Shoot()
-    {
-        Debug.Log(gameObject.name+": Fire !");
-        //TODO : Cleaner instantiate position to prevent collision
-        // Debug.Log((collider2d.bounds.size.y/2)+(projectile.GetComponent<Collider2D>().bounds.size.y/2));
-        // float y_offset=collider2d.bounds.size.y/2+projectile.GetComponent<Collider2D>().bounds.size.y/2+0.1f;
-        float y_offset = 0; //collider2d.bounds.size.y*Mathf.Sign(projectile_speed);
-        //Spawn projectile at above current position
-        Projectile new_projectile = Instantiate<Projectile>(projectile, 
-            new Vector3(transform.position.x, transform.position.y+y_offset, transform.position.z), 
-            transform.rotation
-        ); 
-        new_projectile.speed = projectile_speed; //Set projectile speed & direction
-        new_projectile.tag = "Player";
-
-        shoot_cd = shoot_cooldown; //Reset cooldown
-    }
-
-    private void OnTriggerEnter2D(Collider2D other) {
+    void OnTriggerEnter2D(Collider2D other) {
         Debug.Log(gameObject.name+" collide with "+other.name);
-        //Handle dammage in projectile instead ?
-        if (other.gameObject.layer == LayerMask.NameToLayer("Projectiles") && danger_projectile.Contains(other.gameObject.tag))
-        {
-            Debug.Log(gameObject.name+": Hit by projectile !");
-            Destroy(other.gameObject);
-            Destroy(gameObject);
-        }
     }
+
+    // public override bool Hit()
+    // {
+    //     //TODO : Reparation/Destruction state
+    //     return true; //Consume/Destroy damaging object
+    // }
+    
+    // [ContextMenu("Shoot")]
+    // protected override void Shoot()
+    // {
+    //     Debug.Log(gameObject.name+": Fire !");
+    //     //TODO : Cleaner instantiate position to prevent collision
+    //     // Debug.Log((collider2d.bounds.size.y/2)+(projectile.GetComponent<Collider2D>().bounds.size.y/2));
+    //     // float y_offset=collider2d.bounds.size.y/2+projectile.GetComponent<Collider2D>().bounds.size.y/2+0.1f;
+    //     float y_offset = 0; //collider2d.bounds.size.y*Mathf.Sign(projectile_speed);
+    //     //Spawn projectile at above current position
+    //     Projectile new_projectile = Instantiate<Projectile>(projectile, 
+    //         new Vector3(transform.position.x, transform.position.y+y_offset, transform.position.z), 
+    //         transform.rotation
+    //     ); 
+    //     new_projectile.speed = projectile_speed; //Set projectile speed & direction
+    //     new_projectile.tag = gameObject.tag; //Owner of the projectile
+
+    //     shoot_cd = shoot_cooldown; //Reset cooldown
+    // }
 }

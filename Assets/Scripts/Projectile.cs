@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public float speed; //Movement speed
+    public float speed; //Movement 
+    private HashSet<string> dammage_tags = new HashSet<string>(new [] {"Invader", "Player"});
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +34,14 @@ public class Projectile : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other) 
     {
         Debug.Log(gameObject.name+" collide with "+other.name);
-        // Destroy(gameObject);
+        if (dammage_tags.Contains(other.gameObject.tag) && gameObject.tag != other.gameObject.tag) //other.gameObject.layer == LayerMask.NameToLayer("Projectiles")
+        {
+            Debug.Log(other.gameObject.name+": Hit by projectile !");
+            IHitable entity = other.gameObject.GetComponent<IHitable>();
+            if(entity.Hit()) //Dammage entity
+            {
+                Destroy(gameObject); //Consumed by hit
+            }
+        }
     }
 }
