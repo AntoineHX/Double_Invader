@@ -11,8 +11,7 @@ public class Invader : EntityBase
     //Navigation
     [SerializeField]
     bool random_waypoint_order=false;
-    [SerializeField]
-    Transform[] waypoints;
+    public Transform[] waypoints;
     int destPoint = 0;
     NavMeshAgent agent;
 
@@ -27,7 +26,7 @@ public class Invader : EntityBase
         agent.autoBraking = false;
 
         //Assign Random priority to prevent two agent blocking each other
-        // agent.avoidancePriority=Random.Range(0, 99);
+        agent.avoidancePriority=Random.Range(0, 99);
 
         //Randomize waypoints order
         if(random_waypoint_order){
@@ -79,5 +78,16 @@ public class Invader : EntityBase
         // Choose the next point in the array as the destination,
         // cycling to the start if necessary.
         destPoint = (destPoint + 1) % waypoints.Length;
+    }
+
+    [ContextMenu("Hit")]
+    public override bool Hit()
+    {
+        bool dead = base.Hit();
+        if(dead)
+        {
+            InvaderManager.Instance.invaderKilled(this);
+        }
+        return dead; //Consume/Destroy damaging object
     }
 }

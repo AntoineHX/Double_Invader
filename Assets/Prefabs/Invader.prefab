@@ -158,11 +158,7 @@ MonoBehaviour:
   min_shoot_cooldown: 0.5
   max_shoot_cooldown: 5
   random_waypoint_order: 1
-  waypoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  waypoints: []
 --- !u!195 &963507286
 NavMeshAgent:
   m_ObjectHideFlags: 0
