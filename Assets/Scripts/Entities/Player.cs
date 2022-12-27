@@ -16,7 +16,9 @@ public class Player : EntityBase
     [SerializeField]
     UITimer recoveryUI = null; //Script of the UI display
 
-    //Last user input
+    //User input
+    [SerializeField]
+    bool player1Controller=true;
     float move_input, shoot_input;
 
     Rigidbody2D rigidbody2d;
@@ -38,8 +40,8 @@ public class Player : EntityBase
     void Update()
     {
         //Read inputs (See Edit/Project setting / Input Manager)
-        move_input = Input.GetAxis("Horizontal");
-        shoot_input = Input.GetAxis("Fire1");
+        move_input = Input.GetAxis(player1Controller ? "Horizontal1" : "Horizontal2");
+        shoot_input = Input.GetAxis(player1Controller ? "Fire1" : "Fire2");
 
 /*        if(move_input != 0)//Move
         {

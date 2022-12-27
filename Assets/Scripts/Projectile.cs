@@ -5,7 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public float speed; //Movement 
-    private HashSet<string> dammage_tags = new HashSet<string>(new [] {"Invader", "Player"});
+    private HashSet<string> dammage_tags = new HashSet<string>(new [] {"Invader", "Player", "Player2"});
 
     // Start is called before the first frame update
     void Start()
