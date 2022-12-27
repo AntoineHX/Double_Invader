@@ -95,10 +95,10 @@ public class Player : EntityBase
     [ContextMenu("PlayerHit")]
     public override bool Hit()
     {
-        if(recovering) //Hit during repair => Destroyed
+        if(recovering) //Hit during repair => Disabled
         {
-            Debug.Log(gameObject.name+": Destroyed !");
-            Destroy(gameObject);
+            Debug.Log(gameObject.name+": Disabled !");
+            gameObject.SetActive(false); //Disabled
         }
         else //Hit => start recovery
         {

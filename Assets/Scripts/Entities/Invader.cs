@@ -68,6 +68,7 @@ public class Invader : EntityBase
     [ContextMenu("NextPoint")]
     void GotoNextPoint() 
     {
+         //TODO : Different movement strategies ? (Multi projectile, Single player focus, etc.)
         // Returns if no points have been set up
         if (waypoints.Length == 0)
             return;
@@ -83,18 +84,14 @@ public class Invader : EntityBase
     [ContextMenu("IndaderHit")]
     public override bool Hit()
     {
-        bool dead = base.Hit();
-        if(dead)
-        {
-            InvaderManager.Instance.invaderKilled(this); //Unregister invader
-        }
-        return dead; //Consume/Destroy damaging object
+        InvaderManager.Instance.invaderKilled(this); //Unregister invader
+        return base.Hit(); //Consume/Destroy damaging object
     }
     [ContextMenu("InvaderShoot")]
     protected override void Shoot()
     {
         //TODO : Only shoot in alive player direction
-        //TODO : Different shoot strategies ? (Multi projectile, Single player focus, etc.)
+        //TODO : Different shoot strategies (Multi projectile, Single player focus, etc.)
         float tmp = projectile_speed;
         //Random projectile direction
         if(Random.value<0.5)

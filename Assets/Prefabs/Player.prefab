@@ -152,9 +152,10 @@ MonoBehaviour:
   mvt_speed: 5
   projectile: {fileID: 2442949188363525833, guid: 38c7ec6b83c1e3c4aa0889fcc7edf731, type: 3}
   projectile_speed: 5
-  shoot_cooldown: 0.2
+  shoot_cooldown: 0.5
   recoveryTime: 2
   recoveryUI: {fileID: 5436730677063929228}
+  player1Controller: 1
 --- !u!1 &7981640272907712128
 GameObject:
   m_ObjectHideFlags: 0

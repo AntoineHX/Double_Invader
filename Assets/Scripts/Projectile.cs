@@ -33,10 +33,10 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) 
     {
-        Debug.Log(gameObject.name+" collide with "+other.name);
+        // Debug.Log(gameObject.name+" collide with "+other.name);
         if (dammage_tags.Contains(other.gameObject.tag) && gameObject.tag != other.gameObject.tag) //other.gameObject.layer == LayerMask.NameToLayer("Projectiles")
         {
-            Debug.Log(other.gameObject.name+": Hit by projectile !");
+            Debug.Log(other.name+": Hit by "+ gameObject.name);
             IHitable entity = other.gameObject.GetComponent<IHitable>();
             if(entity.Hit()) //Dammage entity
             {
