@@ -80,14 +80,28 @@ public class Invader : EntityBase
         destPoint = (destPoint + 1) % waypoints.Length;
     }
 
-    [ContextMenu("Hit")]
+    [ContextMenu("IndaderHit")]
     public override bool Hit()
     {
         bool dead = base.Hit();
         if(dead)
         {
-            InvaderManager.Instance.invaderKilled(this);
+            InvaderManager.Instance.invaderKilled(this); //Unregister invader
         }
         return dead; //Consume/Destroy damaging object
+    }
+    [ContextMenu("InvaderShoot")]
+    protected override void Shoot()
+    {
+        //TODO : Only shoot in alive player direction
+        //TODO : Different shoot strategies ? (Multi projectile, Single player focus, etc.)
+        float tmp = projectile_speed;
+        //Random projectile direction
+        if(Random.value<0.5)
+        {
+            projectile_speed *= -1;
+        }
+        base.Shoot();
+        projectile_speed = tmp; //Restore original parameter value
     }
 }

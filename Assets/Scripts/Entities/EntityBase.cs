@@ -24,7 +24,7 @@ public abstract class EntityBase : MonoBehaviour, IHitable
     [ContextMenu("Shoot")]
     protected virtual void Shoot()
     {
-        Debug.Log(gameObject.name+": Fire !");
+        // Debug.Log(gameObject.name+": Fire !");
         //TODO : Cleaner instantiate position to prevent collision
         // Debug.Log((collider2d.bounds.size.y/2)+(projectile.GetComponent<Collider2D>().bounds.size.y/2));
         // float y_offset=collider2d.bounds.size.y/2+projectile.GetComponent<Collider2D>().bounds.size.y/2+0.1f;
