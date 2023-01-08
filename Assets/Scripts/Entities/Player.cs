@@ -43,12 +43,6 @@ public class Player : EntityBase
         move_input = Input.GetAxis(player1Controller ? "Horizontal1" : "Horizontal2");
         shoot_input = Input.GetAxis(player1Controller ? "Fire1" : "Fire2");
 
-/*        if(move_input != 0)//Move
-        {
-            Debug.Log("Move :" + move_input * mvt_speed);
-            rigidbody2d.velocity = Vector2.left * move_input * mvt_speed;
-        }*/
-
         //Shoot
         if (shoot_cd > 0)
         {
@@ -80,6 +74,12 @@ public class Player : EntityBase
         Vector2 position = rigidbody2d.position;
         if(!recovering) //Don't move if recovering
             position.x += move_input * mvt_speed * Time.deltaTime;
+        // if(!recovering)
+        // {
+        //     Debug.Log("Move :" + move_input * mvt_speed);
+        //     // rigidbody2d.velocity = Vector2.left * move_input * mvt_speed*Time.deltaTime; //rigidbody velocity isn't moving object
+        //     rigidbody2d.AddForce(Vector2.left * move_input * mvt_speed - rigidbody2d.velocity, ForceMode2D.Force);
+        // }
 
         // Clamp the position of the character so they do not go out of bounds
         Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero);

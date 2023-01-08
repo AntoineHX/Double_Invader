@@ -13,7 +13,6 @@ public abstract class EntityBase : MonoBehaviour, IHitable
     protected float projectile_speed=5.0f;
     protected float shoot_cd;
 
-    protected EntityBase() {}
     [ContextMenu("Hit")]
     public virtual bool Hit()
     {
