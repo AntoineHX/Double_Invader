@@ -8,13 +8,13 @@ using UnityEditor;
 //TODO: Switch to a registering approach for invaders
 public sealed class InvaderManager : MonoBehaviour
 {
-    public static string InvaderManager_path="/GameSystems/InvaderManager";
+    public static string Manager_path="/GameSystems/InvaderManager";
     //Singleton
     private static InvaderManager _instance=null;
     public static InvaderManager Instance { get 
         { 
         if(_instance is null) //Force Awakening if needed
-            GameObject.Find(InvaderManager_path).GetComponent<InvaderManager>().Awake();
+            GameObject.Find(Manager_path).GetComponent<InvaderManager>().Awake();
         return _instance; 
         } 
     }
@@ -165,7 +165,7 @@ public sealed class InvaderManager : MonoBehaviour
 
         if(!ready)
         {
-            InvaderManagerContainer = GameObject.Find(InvaderManager_path);
+            InvaderManagerContainer = GameObject.Find(Manager_path);
             if (InvaderManagerContainer is null)
                 throw new System.Exception("No InvaderManager found under GameSystems");
 

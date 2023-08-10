@@ -37,10 +37,6 @@ public abstract class EntityBase : MonoBehaviour, IHitable
     [ContextMenu("Hit")]
     public virtual bool Hit()
     {
-        if(hit_sound != null)
-        {
-            audioSource.PlayOneShot(hit_sound); //TODO: Play by higher instance, since the gameObjects are destroyed
-        }
         Debug.Log(gameObject.name+": Destroyed !");
         Destroy(gameObject);
         return true; //Consume/Destroy damaging object

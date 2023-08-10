@@ -113,7 +113,7 @@ public class Player : EntityBase
         {
             if(disabled_sound != null)
             {
-                audioSource.PlayOneShot(disabled_sound);
+                AudioManager.Instance.playSound(disabled_sound); //Play hit sound from manager since this object will be disabled
             }
             Debug.Log(gameObject.name+": Disabled !");
             gameObject.SetActive(false); //Disabled
