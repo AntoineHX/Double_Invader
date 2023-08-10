@@ -32,6 +32,10 @@ PrefabInstance:
       value: Player2
       objectReference: {fileID: 0}
     - target: {fileID: 8645568541324954509, guid: dbe1f1b81e66c3044ab5c470fb11b0e2, type: 3}
+      propertyPath: projectile_sound
+      value: 
+      objectReference: {fileID: 8300000, guid: 60a0682fbc82bd244bdae3f3445cfd17, type: 3}
+    - target: {fileID: 8645568541324954509, guid: dbe1f1b81e66c3044ab5c470fb11b0e2, type: 3}
       propertyPath: projectile_speed
       value: -5
       objectReference: {fileID: 0}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //Represent main entities of the game
+[RequireComponent(typeof(AudioSource))]
 public abstract class EntityBase : MonoBehaviour, IHitable
 {
     [SerializeField]
@@ -11,11 +12,35 @@ public abstract class EntityBase : MonoBehaviour, IHitable
     protected Projectile projectile;
     [SerializeField]
     protected float projectile_speed=5.0f;
+    
+    protected AudioSource audioSource;
+    [SerializeField]
+    protected AudioClip projectile_sound, hit_sound;
     protected float shoot_cd;
+
+    // Start is called before the first frame update
+    public virtual void Start()
+    {
+        shoot_cd=0.0f;
+
+        audioSource = GetComponent<AudioSource>();
+
+        //Check components
+        if(projectile is null)
+            Debug.LogWarning(gameObject.name+" doesn't have a projectile set");
+        if(projectile_sound is null)
+            Debug.LogWarning(gameObject.name+" doesn't have a projectile_sound set");
+        if(hit_sound is null)
+            Debug.LogWarning(gameObject.name+" doesn't have a hit_sound set");
+    }
 
     [ContextMenu("Hit")]
     public virtual bool Hit()
     {
+        if(hit_sound != null)
+        {
+            audioSource.PlayOneShot(hit_sound); //TODO: Play by higher instance, since the gameObjects are destroyed
+        }
         Debug.Log(gameObject.name+": Destroyed !");
         Destroy(gameObject);
         return true; //Consume/Destroy damaging object
@@ -23,6 +48,11 @@ public abstract class EntityBase : MonoBehaviour, IHitable
     [ContextMenu("Shoot")]
     protected virtual void Shoot()
     {
+        if(projectile is null)
+        {
+            Debug.LogWarning(gameObject.name+" cannot shoot as it doesn't have a projectile set");
+            return;
+        }
         // Debug.Log(gameObject.name+": Fire !");
         //TODO : Cleaner instantiate position to prevent collision
         // Debug.Log((collider2d.bounds.size.y/2)+(projectile.GetComponent<Collider2D>().bounds.size.y/2));
@@ -39,6 +69,12 @@ public abstract class EntityBase : MonoBehaviour, IHitable
         {
             new_projectile.transform.rotation*=Quaternion.AngleAxis(180.0f,Vector3.forward);
         }
-        new_projectile.tag = gameObject.tag; //Owner of the projectile
+        new_projectile.tag = gameObject.tag; //Owner of the 
+        
+        //Play projectile sound
+        if(projectile_sound != null)
+        {
+            audioSource.PlayOneShot(projectile_sound);
+        }
     }
 }

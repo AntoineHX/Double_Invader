@@ -15,6 +15,8 @@ public class Player : EntityBase
     float recoveryTimer= 0.0f;
     [SerializeField]
     UITimer recoveryUI = null; //Script of the UI display
+    [SerializeField]
+    AudioClip recovery_sound, disabled_sound;
 
     //User input
     [SerializeField]
@@ -25,15 +27,22 @@ public class Player : EntityBase
     Collider2D collider2d;
 
     // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
-         if(recoveryUI is null)
-            Debug.LogWarning(gameObject.name+" doesn't have a recoveryUI set");
-        else
-            recoveryUI.gameObject.SetActive(false);
+        base.Start(); //Call EntityBase Start method
 
         rigidbody2d = GetComponent<Rigidbody2D>();
         collider2d = GetComponent<Collider2D>();
+
+        //Check components
+        if(recoveryUI is null)
+            Debug.LogWarning(gameObject.name+" doesn't have a recoveryUI set");
+        else
+            recoveryUI.gameObject.SetActive(false);
+        if(recovery_sound is null)
+            Debug.LogWarning(gameObject.name+" doesn't have a recovery_sound set");
+        if(disabled_sound is null)
+            Debug.LogWarning(gameObject.name+" doesn't have a disabled_sound set");
     }
 
     // Update is called once per frame
@@ -54,17 +63,22 @@ public class Player : EntityBase
             shoot_cd = shoot_cooldown; //Reset cooldown
         }
 
-        if(recovering && recoveryTimer<recoveryTime) //Update repair UI
-        {
-            recoveryTimer+=Time.deltaTime;
-            if(recoveryUI != null)
-                recoveryUI.SetValue(recoveryTimer/recoveryTime);
-        }
-        else //Finished recovery
-        {
-            recovering=false;
-            recoveryUI.gameObject.SetActive(recovering);
-        }
+        if(recovering)
+            if(recoveryTimer<recoveryTime) //Update repair UI
+            {
+                recoveryTimer+=Time.deltaTime;
+                recoveryUI?.SetValue(recoveryTimer/recoveryTime);
+            }
+            else //Finished recovery
+            {
+                recovering=false;
+                recoveryUI.gameObject.SetActive(recovering);
+                //Play recovery sound
+                if(recovery_sound != null)
+                {
+                    audioSource.PlayOneShot(recovery_sound);
+                }
+            }
     }
 
     // Update used by the Physics engine
@@ -97,11 +111,19 @@ public class Player : EntityBase
     {
         if(recovering) //Hit during repair => Disabled
         {
+            if(disabled_sound != null)
+            {
+                audioSource.PlayOneShot(disabled_sound);
+            }
             Debug.Log(gameObject.name+": Disabled !");
             gameObject.SetActive(false); //Disabled
         }
         else //Hit => start recovery
         {
+            if(hit_sound != null)
+            {
+                audioSource.PlayOneShot(hit_sound);
+            }
             Debug.Log(gameObject.name+": Recovering...");
             recovering=true;
             if(recoveryUI != null) //Display repair UI

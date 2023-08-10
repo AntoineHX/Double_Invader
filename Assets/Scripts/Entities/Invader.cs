@@ -16,8 +16,11 @@ public class Invader : EntityBase
     NavMeshAgent agent;
 
     // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
+        base.Start(); //Call EntityBase Start method
+        shoot_cd=max_shoot_cooldown; //Override shoot cooldown to prevent invaders shooting at spawn time
+
         agent = GetComponent<NavMeshAgent>();
         //Prevent rotation of the ground at movement
         agent.updateRotation = false;
