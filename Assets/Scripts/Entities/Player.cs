@@ -16,7 +16,7 @@ public class Player : EntityBase
     [SerializeField]
     UITimer recoveryUI = null; //Script of the UI display
     [SerializeField]
-    AudioClip recovery_sound, disabled_sound;
+    AudioClip recovery_sound, hit_sound;
 
     //User input
     [SerializeField]
@@ -41,8 +41,8 @@ public class Player : EntityBase
             recoveryUI.gameObject.SetActive(false);
         if(recovery_sound is null)
             Debug.LogWarning(gameObject.name+" doesn't have a recovery_sound set");
-        if(disabled_sound is null)
-            Debug.LogWarning(gameObject.name+" doesn't have a disabled_sound set");
+        if(hit_sound is null)
+            Debug.LogWarning(gameObject.name+" doesn't have a hit_sound set");
     }
 
     // Update is called once per frame
@@ -111,11 +111,9 @@ public class Player : EntityBase
     {
         if(recovering) //Hit during repair => Disabled
         {
-            if(disabled_sound != null)
-            {
-                AudioManager.Instance.playSound(disabled_sound); //Play hit sound from manager since this object will be disabled
-            }
             Debug.Log(gameObject.name+": Disabled !");
+            if(destroy_prefab)
+                Instantiate(destroy_prefab, transform.position, transform.rotation, transform.parent); //Instantiate destruction effect
             gameObject.SetActive(false); //Disabled
         }
         else //Hit => start recovery

@@ -87,7 +87,6 @@ public class Invader : EntityBase
     [ContextMenu("InvaderHit")]
     public override bool Hit()
     {
-        AudioManager.Instance.playSound(hit_sound); //Play hit sound from manager since this object will be destroyed
         InvaderManager.Instance.invaderKilled(this); //Unregister invader
         return base.Hit(); //Consume/Destroy damaging object
     }

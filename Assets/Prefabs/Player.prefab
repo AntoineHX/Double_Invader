@@ -244,6 +244,7 @@ MonoBehaviour:
   projectile_speed: 5
   projectile_sound: {fileID: 8300000, guid: e3298e35eed19c942b6f4d2d41cd21ba, type: 3}
   hit_sound: {fileID: 8300000, guid: 18d6a007b013c9d4ebf7f7c44e1e5f06, type: 3}
+  destroy_prefab: {fileID: 8262558295941078399, guid: 2daae95c48dc6ab449341b2409f6c21e, type: 3}
   shoot_cooldown: 0.5
   recoveryTime: 2
   recoveryUI: {fileID: 7075364494932679046}

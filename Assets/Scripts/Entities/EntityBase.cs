@@ -15,8 +15,11 @@ public abstract class EntityBase : MonoBehaviour, IHitable
     
     protected AudioSource audioSource;
     [SerializeField]
-    protected AudioClip projectile_sound, hit_sound;
+    protected AudioClip projectile_sound;
     protected float shoot_cd;
+
+    [SerializeField]
+    protected GameObject destroy_prefab; //Prefab to instantiate on destruction
 
     // Start is called before the first frame update
     public virtual void Start()
@@ -30,14 +33,14 @@ public abstract class EntityBase : MonoBehaviour, IHitable
             Debug.LogWarning(gameObject.name+" doesn't have a projectile set");
         if(projectile_sound is null)
             Debug.LogWarning(gameObject.name+" doesn't have a projectile_sound set");
-        if(hit_sound is null)
-            Debug.LogWarning(gameObject.name+" doesn't have a hit_sound set");
     }
 
     [ContextMenu("Hit")]
     public virtual bool Hit()
     {
         Debug.Log(gameObject.name+": Destroyed !");
+        if(destroy_prefab)
+            Instantiate(destroy_prefab, transform.position, transform.rotation, transform.parent); //Instantiate destruction effect
         Destroy(gameObject);
         return true; //Consume/Destroy damaging object
     }

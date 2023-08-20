@@ -51,8 +51,7 @@ public sealed class InvaderManager : MonoBehaviour
 
     private List<IEnumerator> coroutines= new List<IEnumerator>(); //List of InvaderManager coroutines
 
-    //Request new invader
-    //Return wether a new invader was created
+    //Request new invader. Return wether a new invader was created
     public bool invaderRequest(float SpawnChance=100.0f)
     {
         Debug.Log("Invader count: "+invaderList.Count);
