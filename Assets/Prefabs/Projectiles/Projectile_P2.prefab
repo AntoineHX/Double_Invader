@@ -51,6 +51,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6864273659626033463, guid: f3633d8660c830d4cab14a2164d95666, type: 3}
+      propertyPath: projectile_sound
+      value: 
+      objectReference: {fileID: 8300000, guid: e3298e35eed19c942b6f4d2d41cd21ba, type: 3}
     - target: {fileID: 7800463584406002109, guid: f3633d8660c830d4cab14a2164d95666, type: 3}
       propertyPath: m_Name
       value: Projectile_P2

@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  projectile_sound: {fileID: 8300000, guid: e3298e35eed19c942b6f4d2d41cd21ba, type: 3}
+  projectile_sound: {fileID: 8300000, guid: 5ff5bd936a30a904da907f35c8dd382e, type: 3}
 --- !u!82 &4938671003393385808
 AudioSource:
   m_ObjectHideFlags: 0
