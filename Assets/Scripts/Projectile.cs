@@ -2,15 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class Projectile : MonoBehaviour
 {
     public float speed; //Movement 
     private HashSet<string> dammage_tags = new HashSet<string>(new [] {"Invader", "Player", "Player2"});
 
+    protected AudioSource audioSource;
+    [SerializeField]
+    protected AudioClip projectile_sound;
+
     // Start is called before the first frame update
     void Start()
     {
+
+        audioSource = GetComponent<AudioSource>();
         
+        if(projectile_sound is null)
+            Debug.LogWarning(gameObject.name+" doesn't have a projectile_sound set");
+        else //Play projectile sound
+            audioSource.PlayOneShot(projectile_sound);
     }
     
     // Update is called once per frame

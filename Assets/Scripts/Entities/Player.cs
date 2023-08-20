@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider2D),typeof(Rigidbody2D))]
+[RequireComponent(typeof(Collider2D),typeof(Rigidbody2D),typeof(AudioSource))]
 public class Player : EntityBase
 {
     [SerializeField]
@@ -15,6 +15,8 @@ public class Player : EntityBase
     float recoveryTimer= 0.0f;
     [SerializeField]
     UITimer recoveryUI = null; //Script of the UI display
+
+    protected AudioSource audioSource;
     [SerializeField]
     AudioClip recovery_sound, hit_sound;
 
@@ -33,6 +35,7 @@ public class Player : EntityBase
 
         rigidbody2d = GetComponent<Rigidbody2D>();
         collider2d = GetComponent<Collider2D>();
+        audioSource = GetComponent<AudioSource>();
 
         //Check components
         if(recoveryUI is null)

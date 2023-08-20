@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //Represent main entities of the game
-[RequireComponent(typeof(AudioSource))]
 public abstract class EntityBase : MonoBehaviour, IHitable
 {
     [SerializeField]
@@ -13,9 +12,6 @@ public abstract class EntityBase : MonoBehaviour, IHitable
     [SerializeField]
     protected float projectile_speed=5.0f;
     
-    protected AudioSource audioSource;
-    [SerializeField]
-    protected AudioClip projectile_sound;
     protected float shoot_cd;
 
     [SerializeField]
@@ -26,13 +22,9 @@ public abstract class EntityBase : MonoBehaviour, IHitable
     {
         shoot_cd=0.0f;
 
-        audioSource = GetComponent<AudioSource>();
-
         //Check components
         if(projectile is null)
             Debug.LogWarning(gameObject.name+" doesn't have a projectile set");
-        if(projectile_sound is null)
-            Debug.LogWarning(gameObject.name+" doesn't have a projectile_sound set");
     }
 
     [ContextMenu("Hit")]
@@ -68,12 +60,6 @@ public abstract class EntityBase : MonoBehaviour, IHitable
         {
             new_projectile.transform.rotation*=Quaternion.AngleAxis(180.0f,Vector3.forward);
         }
-        new_projectile.tag = gameObject.tag; //Owner of the 
-        
-        //Play projectile sound
-        if(projectile_sound != null)
-        {
-            audioSource.PlayOneShot(projectile_sound);
-        }
+        new_projectile.tag = gameObject.tag; //Owner of the projectile
     }
 }

@@ -240,16 +240,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mvt_speed: 5
-  projectile: {fileID: 2442949188363525833, guid: 38c7ec6b83c1e3c4aa0889fcc7edf731, type: 3}
+  projectile: {fileID: 6988391022515767404, guid: 38c7ec6b83c1e3c4aa0889fcc7edf731, type: 3}
   projectile_speed: 5
-  projectile_sound: {fileID: 8300000, guid: e3298e35eed19c942b6f4d2d41cd21ba, type: 3}
-  hit_sound: {fileID: 8300000, guid: 18d6a007b013c9d4ebf7f7c44e1e5f06, type: 3}
   destroy_prefab: {fileID: 8262558295941078399, guid: 2daae95c48dc6ab449341b2409f6c21e, type: 3}
   shoot_cooldown: 0.5
   recoveryTime: 2
   recoveryUI: {fileID: 7075364494932679046}
   recovery_sound: {fileID: 8300000, guid: c4f24bb3e1531b44796fc33c46287cea, type: 3}
-  disabled_sound: {fileID: 8300000, guid: 380a61624a607f042ab5e96218f37633, type: 3}
+  hit_sound: {fileID: 8300000, guid: 18d6a007b013c9d4ebf7f7c44e1e5f06, type: 3}
   player1Controller: 1
 --- !u!82 &3554984405391373608
 AudioSource:
