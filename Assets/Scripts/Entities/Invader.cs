@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class Invader : EntityBase
+public class Invader : ActiveEntity
 {
     [SerializeField]
     float min_shoot_cooldown=1.0f, max_shoot_cooldown=5.0f; //s
@@ -85,11 +85,11 @@ public class Invader : EntityBase
     }
 
     [ContextMenu("DestroyInvader")]
-    protected override void DestroyEntity(bool delete=true)
+    protected override void DestroyEntity()
     {
-        if(delete)
+        if(delete_on_destroy)
             InvaderManager.Instance.invaderKilled(this); //Unregister invader
-        base.DestroyEntity(delete); //Destroy/Disable invader
+        base.DestroyEntity(); //Destroy/Disable invader
     }
     
     [ContextMenu("InvaderShoot")]

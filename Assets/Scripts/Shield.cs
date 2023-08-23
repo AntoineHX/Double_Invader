@@ -3,33 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class Shield : MonoBehaviour, IHitable
+public class Shield : EntityBase
 {
-    [SerializeField]
-    uint max_hp = 3; //Max health points
-    [SerializeField]
-    int hp = 3; //Current health points
-
-    [SerializeField]
     SpriteRenderer spriteRenderer;
-    private void Start() 
+    public override void Start() 
     {
+        base.Start();//Call EntityBase Start method
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    [ContextMenu("Hit")]
-    public virtual int Hit(int dmg=1)
+    [ContextMenu("ShieldHit")]
+    public override int Hit(int dmg=1)
     {
-        int projectile_dmg = hp;
-        hp-=dmg;
-        Debug.Log(gameObject.name+" Take "+dmg+" dmg! "+hp+"/"+max_hp+" HP left");
-        if(hp<=0) //Destroy when out of hp
-        {
-            //TODO: Destroy animation
-            Debug.Log(gameObject.name+": Disabled !");
-            gameObject.SetActive(false); //Disabled
-        }
-        else
+        int projectile_dmg = base.Hit(dmg); //Take damage
+
+        if(hp>0)
         {
             //Change shield color
             Color new_color = spriteRenderer.color;

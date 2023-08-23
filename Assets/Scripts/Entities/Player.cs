@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D),typeof(Rigidbody2D),typeof(AudioSource))]
-public class Player : EntityBase
+public class Player : ActiveEntity
 {
     [SerializeField]
     float shoot_cooldown=1.0f; //
@@ -21,9 +21,8 @@ public class Player : EntityBase
     [SerializeField]
     UITimer recoveryUI = null; //Script of the UI display
 
-    protected AudioSource audioSource;
     [SerializeField]
-    AudioClip recovery_sound, hit_sound;
+    AudioClip recovery_sound;
 
     //User input
     [SerializeField]
@@ -40,7 +39,6 @@ public class Player : EntityBase
 
         rigidbody2d = GetComponent<Rigidbody2D>();
         collider2d = GetComponent<Collider2D>();
-        audioSource = GetComponent<AudioSource>();
 
         //Check components
         if(recoveryUI is null)
@@ -49,8 +47,6 @@ public class Player : EntityBase
             recoveryUI.gameObject.SetActive(false);
         if(recovery_sound is null)
             Debug.LogWarning(gameObject.name+" doesn't have a recovery_sound set");
-        if(hit_sound is null)
-            Debug.LogWarning(gameObject.name+" doesn't have a hit_sound set");
         if(super_projectile is null)
             Debug.LogWarning(gameObject.name+" doesn't have a super_projectile set");
     }
@@ -130,12 +126,12 @@ public class Player : EntityBase
     public override int Hit(int dmg=1)
     {
         int projectile_dmg = hp;
-        //TODO: One shot if takeing execissive dammage ?
-        if(recovering) //Hit during repair => Disabled
+        
+        if(recovering) //Hit during repair
         {
-           DestroyEntity(false);//Disabled
+           DestroyEntity();//Disable
         }
-        else //Hit
+        else //Hit while active
         {
             //Play hit sound
             if(hit_sound != null)
@@ -148,7 +144,7 @@ public class Player : EntityBase
             
             if(hp<=-max_hp) //Excessive dammage => One-shot
             {
-                DestroyEntity(false);//Disabled
+                DestroyEntity();//Disabled
             }
             else if(hp<=0) //Normal dammage => Recovery
             {

@@ -136,5 +136,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1ec45cedbf023d4598b1ff087bd2256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Charges: 3
+  max_hp: 3
+  hp: 3
+  delete_on_destroy: 1
+  destroy_prefab: {fileID: 0}
+  hit_sound: {fileID: 0}
   spriteRenderer: {fileID: 0}
