@@ -47,6 +47,10 @@ PrefabInstance:
       propertyPath: player1Controller
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8645568541324954509, guid: dbe1f1b81e66c3044ab5c470fb11b0e2, type: 3}
+      propertyPath: shot_spd_multiplier
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 8645568541324954510, guid: dbe1f1b81e66c3044ab5c470fb11b0e2, type: 3}
       propertyPath: m_RootOrder
       value: 0

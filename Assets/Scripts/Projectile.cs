@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class Projectile : MonoBehaviour
 {
+    public int power = 1; // Dammage / Penetration potential
     public float speed; //Movement 
     private HashSet<string> dammage_tags = new HashSet<string>(new [] {"Invader", "Player", "Player2"});
 
@@ -47,12 +48,11 @@ public class Projectile : MonoBehaviour
         // Debug.Log(gameObject.name+" collide with "+other.name);
         if (dammage_tags.Contains(other.gameObject.tag) && gameObject.tag != other.gameObject.tag) //other.gameObject.layer == LayerMask.NameToLayer("Projectiles")
         {
-            Debug.Log(other.name+": Hit by "+ gameObject.name);
             IHitable entity = other.gameObject.GetComponent<IHitable>();
-            if(entity.Hit()) //Dammage entity
-            {
-                Destroy(gameObject); //Consumed by hit
-            }
+            power -= entity.Hit(); //Dammage entity & Consume power
+            Debug.Log(other.name+": Hit by "+ gameObject.name+". Power remaining ["+power+"].");
+            if(power<=0) //Consumed by hit
+                Destroy(gameObject); 
         }
     }
 }

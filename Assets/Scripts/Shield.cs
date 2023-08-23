@@ -6,44 +6,50 @@ using UnityEngine;
 public class Shield : MonoBehaviour, IHitable
 {
     [SerializeField]
-    uint Charges = 3;
-    uint currentCharge;
+    uint max_hp = 3; //Max health points
+    [SerializeField]
+    int hp = 3; //Current health points
 
     [SerializeField]
     SpriteRenderer spriteRenderer;
     private void Start() 
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        currentCharge=Charges;
     }
 
     [ContextMenu("Hit")]
-    public virtual bool Hit()
+    public virtual int Hit(int dmg=1)
     {
-        currentCharge-=1;
-        Debug.Log(gameObject.name+" energy: "+currentCharge+"/"+Charges);
-        if(currentCharge<1) //Destroy when out of charges
+        int projectile_dmg = hp;
+        hp-=dmg;
+        Debug.Log(gameObject.name+" Take "+dmg+" dmg! "+hp+"/"+max_hp+" HP left");
+        if(hp<=0) //Destroy when out of hp
         {
+            //TODO: Destroy animation
             Debug.Log(gameObject.name+": Disabled !");
             gameObject.SetActive(false); //Disabled
         }
-        //Change shield color
-        Color new_color = spriteRenderer.color;
-        switch (currentCharge)
+        else
         {
-            case(2):
+            //Change shield color
+            Color new_color = spriteRenderer.color;
+            if(hp>2*max_hp/3)
+            {
+                new_color = Color.cyan;
+                new_color.a = spriteRenderer.color.a;
+            }
+            else if(hp>max_hp/3)
+            {
                 new_color = Color.magenta;
                 new_color.a = spriteRenderer.color.a;
-                break;
-            case(1):
+            }
+            else if(hp>0)
+            {
                 new_color = Color.red;
                 new_color.a = spriteRenderer.color.a;
-                break;
-            default:
-                break;
+            }
+            spriteRenderer.color = new_color;
         }
-        spriteRenderer.color = new_color;
-
-        return true; //Consume/Destroy damaging object
+        return projectile_dmg; //Consume damaging object
     }
 }

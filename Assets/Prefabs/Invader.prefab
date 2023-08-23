@@ -140,7 +140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mvt_speed: 5
   projectile: {fileID: 6788694541671085688, guid: b944cdb87e60ac14bb8dfb5a41c582a8, type: 3}
-  projectile_speed: -5
+  shot_spd_multiplier: 1
   destroy_prefab: {fileID: 8262558295941078399, guid: 2daae95c48dc6ab449341b2409f6c21e, type: 3}
   min_shoot_cooldown: 0.5
   max_shoot_cooldown: 5

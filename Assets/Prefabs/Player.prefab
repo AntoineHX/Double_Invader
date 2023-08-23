@@ -241,9 +241,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mvt_speed: 5
   projectile: {fileID: 6988391022515767404, guid: 38c7ec6b83c1e3c4aa0889fcc7edf731, type: 3}
-  projectile_speed: 5
+  shot_spd_multiplier: 1
   destroy_prefab: {fileID: 8262558295941078399, guid: 2daae95c48dc6ab449341b2409f6c21e, type: 3}
   shoot_cooldown: 0.5
+  charge_time: 1
+  super_projectile: {fileID: 6864273659626033463, guid: 47605f3f943cd91418af891436e93399, type: 3}
   recoveryTime: 2
   recoveryUI: {fileID: 7075364494932679046}
   recovery_sound: {fileID: 8300000, guid: c4f24bb3e1531b44796fc33c46287cea, type: 3}

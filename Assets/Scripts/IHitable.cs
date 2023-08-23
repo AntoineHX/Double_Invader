@@ -5,5 +5,5 @@ using UnityEngine;
 //Represent object that can be dammaged
 public interface IHitable //Unity inspector doesn't handle well interface...    
 {
-    bool Hit();
+    int Hit(int dmg=1);
 }

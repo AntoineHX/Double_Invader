@@ -6,7 +6,12 @@ using UnityEngine;
 public class Player : EntityBase
 {
     [SerializeField]
-    float shoot_cooldown=1.0f; //s
+    float shoot_cooldown=1.0f; //
+    [SerializeField]
+    float charge_time=1.0f; //Time to charge the shoot
+    float shoot_charge=0.0f; //Charge of the shoot
+    [SerializeField]
+    protected Projectile super_projectile; //Charged shot
 
     //Recovery
     bool recovering = false; //TODO : link repair UI to set method
@@ -46,6 +51,8 @@ public class Player : EntityBase
             Debug.LogWarning(gameObject.name+" doesn't have a recovery_sound set");
         if(hit_sound is null)
             Debug.LogWarning(gameObject.name+" doesn't have a hit_sound set");
+        if(super_projectile is null)
+            Debug.LogWarning(gameObject.name+" doesn't have a super_projectile set");
     }
 
     // Update is called once per frame
@@ -60,10 +67,18 @@ public class Player : EntityBase
         {
             shoot_cd-=Time.deltaTime;
         }
-        if (shoot_input != 0 && shoot_cd<=0 && !recovering)
+        if (shoot_cd<=0 && !recovering)
         {
-            Shoot();
-            shoot_cd = shoot_cooldown; //Reset cooldown
+            if(shoot_input == 0 && shoot_charge>0.0f) //Release shot
+            {
+                Shoot();
+                shoot_cd = shoot_cooldown; //Reset 
+                shoot_charge = 0.0f;
+            }
+            else if(shoot_input!=0) //Charge shoot
+            {
+                shoot_charge+=Time.deltaTime;
+            }
         }
 
         if(recovering)
@@ -74,6 +89,8 @@ public class Player : EntityBase
             }
             else //Finished recovery
             {
+                hp= (int)max_hp; //Reset health
+
                 recovering=false;
                 recoveryUI.gameObject.SetActive(recovering);
                 //Play recovery sound
@@ -89,7 +106,7 @@ public class Player : EntityBase
     {
         //Movement of a physic object
         Vector2 position = rigidbody2d.position;
-        if(!recovering) //Don't move if recovering
+        if(!recovering && shoot_charge==0.0f) //Don't move if recovering or charging shot
             position.x += move_input * mvt_speed * Time.deltaTime;
         // if(!recovering)
         // {
@@ -110,36 +127,64 @@ public class Player : EntityBase
     // }
 
     [ContextMenu("PlayerHit")]
-    public override bool Hit()
+    public override int Hit(int dmg=1)
     {
+        int projectile_dmg = hp;
+        //TODO: One shot if takeing execissive dammage ?
         if(recovering) //Hit during repair => Disabled
         {
-            Debug.Log(gameObject.name+": Disabled !");
-            if(destroy_prefab)
-                Instantiate(destroy_prefab, transform.position, transform.rotation, transform.parent); //Instantiate destruction effect
-            gameObject.SetActive(false); //Disabled
+           DestroyEntity(false);//Disabled
         }
-        else //Hit => start recovery
+        else //Hit
         {
+            //Play hit sound
             if(hit_sound != null)
             {
                 audioSource.PlayOneShot(hit_sound);
             }
-            Debug.Log(gameObject.name+": Recovering...");
-            recovering=true;
-            if(recoveryUI != null) //Display repair UI
+
+            hp-=dmg; //take dammage
+            Debug.Log(gameObject.name+": Take "+dmg+" dmg! "+hp+"/"+max_hp+" HP left");
+            
+            if(hp<=-max_hp) //Excessive dammage => One-shot
             {
-                recoveryTimer=0.0f;
-                recoveryUI.SetValue(recoveryTimer/recoveryTime);
-                recoveryUI.gameObject.SetActive(recovering);
+                DestroyEntity(false);//Disabled
+            }
+            else if(hp<=0) //Normal dammage => Recovery
+            {
+                Debug.Log(gameObject.name+": Recovering...");
+                recovering=true;
+                if(recoveryUI != null) //Display repair UI
+                {
+                    recoveryTimer=0.0f;
+                    recoveryUI.SetValue(recoveryTimer/recoveryTime);
+                    recoveryUI.gameObject.SetActive(recovering);
+                }   
             }
         }
-        return true; //Consume/Destroy damaging object
+        return projectile_dmg; //Consume damaging object
     }
     
-    // [ContextMenu("Shoot")]
-    // protected override void Shoot()
-    // {
-    //     Debug.Log(gameObject.name+": Fire !");
-    // }
+    [ContextMenu("PlayerShoot")]
+    protected override void Shoot()
+    {
+        if(shoot_charge<charge_time) //Base shot
+            base.Shoot();
+        else //Charged shot
+        {
+            if(super_projectile is null)
+                Debug.LogWarning(gameObject.name+" cannot shoot as it doesn't have a super projectile set");
+            else
+            {
+                //Spawn projectile at current position
+                Projectile new_projectile = Instantiate<Projectile>(super_projectile, transform.position, transform.rotation);
+                new_projectile.speed *= shot_spd_multiplier; //Set projectile speed & direction
+                if(new_projectile.speed<0) //Reoriente projectile if necessary
+                {
+                    new_projectile.transform.rotation*=Quaternion.AngleAxis(180.0f,Vector3.forward);
+                }
+                new_projectile.tag = gameObject.tag; //Owner of the projectile
+            }
+        }
+    }
 }
