@@ -49,7 +49,7 @@ public class Projectile : MonoBehaviour
         if (dammage_tags.Contains(other.gameObject.tag) && gameObject.tag != other.gameObject.tag) //other.gameObject.layer == LayerMask.NameToLayer("Projectiles")
         {
             IHitable entity = other.gameObject.GetComponent<IHitable>();
-            power -= entity.Hit(); //Dammage entity & Consume power
+            power -= entity.Hit(power); //Dammage entity & Consume power
             Debug.Log(other.name+": Hit by "+ gameObject.name+". Power remaining ["+power+"].");
             if(power<=0) //Consumed by hit
                 Destroy(gameObject); 
