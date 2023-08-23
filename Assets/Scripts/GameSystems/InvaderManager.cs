@@ -13,7 +13,7 @@ public sealed class InvaderManager : MonoBehaviour
     private static InvaderManager _instance=null;
     public static InvaderManager Instance { get 
         { 
-        if(_instance is null) //Force Awakening if needed
+        if(_instance == null) //Force Awakening if needed
             GameObject.Find(Manager_path).GetComponent<InvaderManager>().Awake();
         return _instance; 
         } 
@@ -26,9 +26,9 @@ public sealed class InvaderManager : MonoBehaviour
     int nbMaxInvaders= 1; //Maximum active invaders
     public int MaxInvaders{ get{return nbMaxInvaders;} private set{nbMaxInvaders=value;}} //Accessor nbMaxInvaders
     [SerializeField]
-    GameObject invaderWaypointsContainer = null; //Object containing invader waypoints
+    GameObject invaderWaypointsContainer; //Object containing invader waypoints
     [SerializeField]
-    GameObject invaderSpawnsContainer = null; //Object containing invader spawn points
+    GameObject invaderSpawnsContainer; //Object containing invader spawn points
     [SerializeField]
     float invaderSpawnChance = 100.0f; //Chance of new invader every request
     [SerializeField]
@@ -37,7 +37,7 @@ public sealed class InvaderManager : MonoBehaviour
     [SerializeField]
     string PrefabsRessourceFolder = "invaders"; //Ressource folder containing invaders prefabs
     private Invader[] invadersPrefabs;
-    GameObject InvaderManagerContainer = null;
+    GameObject InvaderManagerContainer;
 
     private List<Invader> _invaderList = new List<Invader>();
     public List<Invader> invaderList
@@ -117,7 +117,7 @@ public sealed class InvaderManager : MonoBehaviour
     {
         //TODO : Handle multiple spawn points
         // Load invader spawn points //
-        if (invaderSpawnsContainer is null)
+        if (invaderSpawnsContainer == null)
             throw new System.Exception("No invader spawns provided");
 
         invaderSpawns = new List<Transform>();
@@ -135,7 +135,7 @@ public sealed class InvaderManager : MonoBehaviour
         }
 
         // Load invader targets //
-        if (invaderWaypointsContainer is null)
+        if (invaderWaypointsContainer == null)
             throw new System.Exception("No invader waypoints provided");
 
         invaderWaypoints = new List<Transform>();
@@ -165,7 +165,7 @@ public sealed class InvaderManager : MonoBehaviour
         if(!ready)
         {
             InvaderManagerContainer = GameObject.Find(Manager_path);
-            if (InvaderManagerContainer is null)
+            if (InvaderManagerContainer == null)
                 throw new System.Exception("No InvaderManager found under GameSystems");
 
             // Load invaders prefabs //

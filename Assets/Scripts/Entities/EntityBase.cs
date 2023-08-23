@@ -23,11 +23,11 @@ public abstract class EntityBase : MonoBehaviour, IHitable
     public virtual void Start()
     {
         audioSource = GetComponent<AudioSource>();
-
-        //Check components
-        if(hit_sound is null)
+        
+        //Check components (Note: Avoid 'is null' with Unity objects as it's not reliable)
+        if(hit_sound == null)
             Debug.LogWarning(gameObject.name+" doesn't have a hit_sound set");
-        if(destroy_prefab is null)
+        if(destroy_prefab == null)
             Debug.LogWarning(gameObject.name+" doesn't have a destroy_prefab set");
     }
 

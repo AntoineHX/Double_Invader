@@ -20,15 +20,15 @@ public abstract class ActiveEntity : EntityBase
         base.Start(); //Call EntityBase Start method
         shoot_cd=0.0f;
 
-        //Check components
-        if(projectile is null)
+        //Check components (Note: Avoid 'is null' with Unity objects as it's not reliable)
+        if(projectile == null)
             Debug.LogWarning(gameObject.name+" doesn't have a projectile set");
     }
 
     [ContextMenu("Shoot")]
     protected virtual void Shoot()
     {
-        if(projectile is null)
+        if(projectile == null)
             Debug.LogWarning(gameObject.name+" cannot shoot as it doesn't have a projectile set");
         else
         {

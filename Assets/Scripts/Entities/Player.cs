@@ -19,7 +19,7 @@ public class Player : ActiveEntity
     float recoveryTime = 2.0f; //Time for preparation of product
     float recoveryTimer= 0.0f;
     [SerializeField]
-    UITimer recoveryUI = null; //Script of the UI display
+    UITimer recoveryUI; //Script of the UI display
 
     [SerializeField]
     AudioClip recovery_sound;
@@ -40,14 +40,14 @@ public class Player : ActiveEntity
         rigidbody2d = GetComponent<Rigidbody2D>();
         collider2d = GetComponent<Collider2D>();
 
-        //Check components
-        if(recoveryUI is null)
+        //Check components (Note: Avoid 'is null' with Unity objects as it's not reliable)
+        if(recoveryUI == null)
             Debug.LogWarning(gameObject.name+" doesn't have a recoveryUI set");
         else
             recoveryUI.gameObject.SetActive(false);
-        if(recovery_sound is null)
+        if(recovery_sound == null)
             Debug.LogWarning(gameObject.name+" doesn't have a recovery_sound set");
-        if(super_projectile is null)
+        if(super_projectile == null)
             Debug.LogWarning(gameObject.name+" doesn't have a super_projectile set");
     }
 
@@ -168,7 +168,7 @@ public class Player : ActiveEntity
             base.Shoot();
         else //Charged shot
         {
-            if(super_projectile is null)
+            if(super_projectile == null)
                 Debug.LogWarning(gameObject.name+" cannot shoot as it doesn't have a super projectile set");
             else
             {

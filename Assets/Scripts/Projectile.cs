@@ -19,7 +19,7 @@ public class Projectile : MonoBehaviour
 
         audioSource = GetComponent<AudioSource>();
         
-        if(projectile_sound is null)
+        if(projectile_sound == null)
             Debug.LogWarning(gameObject.name+" doesn't have a projectile_sound set");
         else //Play projectile sound
             audioSource.PlayOneShot(projectile_sound);
