@@ -513,10 +513,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player1
       objectReference: {fileID: 0}
-    - target: {fileID: 8645568541324954509, guid: dbe1f1b81e66c3044ab5c470fb11b0e2, type: 3}
-      propertyPath: charge_sound
-      value: 
-      objectReference: {fileID: 8300000, guid: aef077ef59a8c1846aed106621ebf34e, type: 3}
     - target: {fileID: 8645568541324954510, guid: dbe1f1b81e66c3044ab5c470fb11b0e2, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -6826,7 +6822,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6825383303079894916, guid: dce5716ae0614314fab2a5fa0b9c4ea6, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6825383303079894916, guid: dce5716ae0614314fab2a5fa0b9c4ea6, type: 3}
       propertyPath: m_LocalRotation.x
@@ -6838,7 +6834,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6825383303079894916, guid: dce5716ae0614314fab2a5fa0b9c4ea6, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6825383303079894916, guid: dce5716ae0614314fab2a5fa0b9c4ea6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -6850,7 +6846,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6825383303079894916, guid: dce5716ae0614314fab2a5fa0b9c4ea6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 6825383303079894923, guid: dce5716ae0614314fab2a5fa0b9c4ea6, type: 3}
       propertyPath: m_Name

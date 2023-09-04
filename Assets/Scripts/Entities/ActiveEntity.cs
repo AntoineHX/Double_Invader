@@ -42,7 +42,7 @@ public abstract class ActiveEntity : EntityBase
             //     transform.rotation
             // ); 
             //Spawn projectile at current position
-            Projectile new_projectile = Instantiate<Projectile>(projectile, transform.position, transform.rotation);
+            Projectile new_projectile = Instantiate<Projectile>(projectile, transform.position, Quaternion.identity); //Always orient projectile upward, by default
             new_projectile.speed *= shot_spd_multiplier; //Set projectile speed & direction
             if(new_projectile.speed<0) //Reoriente projectile if necessary
             {

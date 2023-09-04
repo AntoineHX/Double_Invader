@@ -199,10 +199,6 @@ public class Player : ActiveEntity
                 //Spawn projectile at current position
                 Projectile new_projectile = Instantiate<Projectile>(super_projectile, transform.position, transform.rotation);
                 new_projectile.speed *= shot_spd_multiplier; //Set projectile speed & direction
-                if(new_projectile.speed<0) //Reoriente projectile if necessary
-                {
-                    new_projectile.transform.rotation*=Quaternion.AngleAxis(180.0f,Vector3.forward);
-                }
                 new_projectile.tag = gameObject.tag; //Owner of the projectile
             }
         }
