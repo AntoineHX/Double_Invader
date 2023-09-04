@@ -9437,6 +9437,7 @@ MonoBehaviour:
   recoveryTime: 2
   recoveryUI: {fileID: 7075364494932679046}
   recovery_sound: {fileID: 8300000, guid: c4f24bb3e1531b44796fc33c46287cea, type: 3}
+  charge_sound: {fileID: 8300000, guid: aef077ef59a8c1846aed106621ebf34e, type: 3}
   player1Controller: 1
   charge_effect: {fileID: 2682546129558702501}
   charged_effect: {fileID: 9095793429940892021}

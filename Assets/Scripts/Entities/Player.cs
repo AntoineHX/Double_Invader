@@ -9,7 +9,8 @@ public class Player : ActiveEntity
     float shoot_cooldown=1.0f; //
     [SerializeField]
     float charge_time=1.0f; //Time to charge the shoot
-    float shoot_charge=0.0f; //Charge of the shoot
+    float _shoot_charge=0.0f; //Charge of the shoot (Backing field)
+    float shoot_charge { get=>_shoot_charge; set => charge_shot(value); } //Charge of the shoot
     [SerializeField]
     protected Projectile super_projectile; //Charged shot
 
@@ -22,7 +23,7 @@ public class Player : ActiveEntity
     UITimer recoveryUI; //Script of the UI display
 
     [SerializeField]
-    AudioClip recovery_sound;
+    AudioClip recovery_sound, charge_sound;
 
     //User input
     [SerializeField]
@@ -36,6 +37,7 @@ public class Player : ActiveEntity
     ParticleSystem charge_effect;
     float charge_effect_emission_max;
     float charge_effect_velocity_max;
+
     [SerializeField]
     ParticleSystem charged_effect;
 
@@ -54,6 +56,8 @@ public class Player : ActiveEntity
             recoveryUI.gameObject.SetActive(false);
         if(recovery_sound == null)
             Debug.LogWarning(gameObject.name+" doesn't have a recovery_sound set");
+        if(charge_sound == null)
+            Debug.LogWarning(gameObject.name+" doesn't have a charge_sound set");
         if(super_projectile == null)
             Debug.LogWarning(gameObject.name+" doesn't have a super_projectile set");
         if(charge_effect == null)
@@ -85,30 +89,13 @@ public class Player : ActiveEntity
             {
                 Shoot();
                 shoot_cd = shoot_cooldown; //Reset 
-                shoot_charge = 0.0f;
+                shoot_charge = 0.0f; //Reset charge
 
                 charged_effect?.Stop(); //Stop charged effect
             }
             else if(shoot_input!=0) //Charge shoot
             {
                 shoot_charge+=Time.deltaTime;
-                float charge = Mathf.Clamp(shoot_charge/charge_time,0.0f,1.0f);//% of charge
-                if(charge>=1.0f && charged_effect!=null) //Charged shot
-                {
-                    if(charge_effect!=null && charge_effect.isPlaying) //Stop charge effect
-                        charge_effect.Stop();
-                    if(charged_effect.isStopped) //Play charged effect
-                        charged_effect.Play();
-                }
-                else if(charge_effect!=null) //Update charge effect
-                {
-                    if(charge_effect.isStopped) //Start charge effect
-                        charge_effect.Play();
-                    var em = charge_effect.emission;
-                    em.rateOverTime = charge_effect_emission_max*charge;
-                    var vel = charge_effect.velocityOverLifetime;
-                    vel.speedModifier = charge_effect_velocity_max*charge;
-                }
             }
         }
 
@@ -161,6 +148,8 @@ public class Player : ActiveEntity
     public override int Hit(int dmg=1)
     {
         int projectile_dmg = hp;
+
+        shoot_charge = 0.0f; //Reset charge
         
         if(recovering) //Hit during repair
         {
@@ -216,6 +205,43 @@ public class Player : ActiveEntity
                 }
                 new_projectile.tag = gameObject.tag; //Owner of the projectile
             }
+        }
+    }
+
+    void charge_shot(float charge)
+    {
+        _shoot_charge = Mathf.Clamp(charge, 0.0f,charge_time); //Set value
+
+        if(shoot_charge==0.0f)
+        {
+            if(charge_effect!=null && charge_effect.isPlaying) //Stop charge effect
+                charge_effect.Stop();
+            if(charged_effect!=null && charged_effect.isPlaying) //Stop charged effect
+                charged_effect.Stop();
+            if(charge_sound != null) //Stop charge sound
+                audioSource.Stop();
+        }
+        else if(shoot_charge>=charge_time) //Charged shot
+        {
+            if(charge_effect!=null && charge_effect.isPlaying) //Stop charge effect
+                charge_effect.Stop();
+            if(charged_effect!=null && charged_effect.isStopped) //Play charged effect
+                charged_effect.Play();
+        }
+        else //Update charge effect
+        {
+            if(charge_effect!=null)
+            {
+                if(charge_effect.isStopped) //Start charge effect
+                    charge_effect.Play();
+                var em = charge_effect.emission;
+                em.rateOverTime = charge_effect_emission_max*shoot_charge/charge_time;
+                var vel = charge_effect.velocityOverLifetime;
+                vel.speedModifier = charge_effect_velocity_max*shoot_charge/charge_time;
+            }
+
+            if(charge_sound != null && !audioSource.isPlaying && _shoot_charge>0.2) //Play charge sound after 0.2s of charge (prevent playing for simple shots)
+                audioSource.PlayOneShot(charge_sound);
         }
     }
 }

@@ -513,6 +513,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player1
       objectReference: {fileID: 0}
+    - target: {fileID: 8645568541324954509, guid: dbe1f1b81e66c3044ab5c470fb11b0e2, type: 3}
+      propertyPath: charge_sound
+      value: 
+      objectReference: {fileID: 8300000, guid: aef077ef59a8c1846aed106621ebf34e, type: 3}
     - target: {fileID: 8645568541324954510, guid: dbe1f1b81e66c3044ab5c470fb11b0e2, type: 3}
       propertyPath: m_RootOrder
       value: 5
