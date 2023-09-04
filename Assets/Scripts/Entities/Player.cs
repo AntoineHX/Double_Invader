@@ -32,6 +32,13 @@ public class Player : ActiveEntity
     Rigidbody2D rigidbody2d;
     Collider2D collider2d;
 
+    [SerializeField]
+    ParticleSystem charge_effect;
+    float charge_effect_emission_max;
+    float charge_effect_velocity_max;
+    [SerializeField]
+    ParticleSystem charged_effect;
+
     // Start is called before the first frame update
     public override void Start()
     {
@@ -49,6 +56,15 @@ public class Player : ActiveEntity
             Debug.LogWarning(gameObject.name+" doesn't have a recovery_sound set");
         if(super_projectile == null)
             Debug.LogWarning(gameObject.name+" doesn't have a super_projectile set");
+        if(charge_effect == null)
+            Debug.LogWarning(gameObject.name+" doesn't have a charge_effect set");
+        else
+        {
+            charge_effect_emission_max = charge_effect.emission.rateOverTime.constant;
+            charge_effect_velocity_max = charge_effect.velocityOverLifetime.speedModifier.constant;
+        }
+        if(charged_effect == null)
+            Debug.LogWarning(gameObject.name+" doesn't have a charged_effect set");
     }
 
     // Update is called once per frame
@@ -70,10 +86,29 @@ public class Player : ActiveEntity
                 Shoot();
                 shoot_cd = shoot_cooldown; //Reset 
                 shoot_charge = 0.0f;
+
+                charged_effect?.Stop(); //Stop charged effect
             }
             else if(shoot_input!=0) //Charge shoot
             {
                 shoot_charge+=Time.deltaTime;
+                float charge = Mathf.Clamp(shoot_charge/charge_time,0.0f,1.0f);//% of charge
+                if(charge>=1.0f && charged_effect!=null) //Charged shot
+                {
+                    if(charge_effect!=null && charge_effect.isPlaying) //Stop charge effect
+                        charge_effect.Stop();
+                    if(charged_effect.isStopped) //Play charged effect
+                        charged_effect.Play();
+                }
+                else if(charge_effect!=null) //Update charge effect
+                {
+                    if(charge_effect.isStopped) //Start charge effect
+                        charge_effect.Play();
+                    var em = charge_effect.emission;
+                    em.rateOverTime = charge_effect_emission_max*charge;
+                    var vel = charge_effect.velocityOverLifetime;
+                    vel.speedModifier = charge_effect_velocity_max*charge;
+                }
             }
         }
 
